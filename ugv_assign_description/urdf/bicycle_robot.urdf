@@ -1,0 +1,228 @@
+<?xml version="1.0" ?>
+
+<!-- Robot name -->
+<robot name="bicycle_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Base Link of Robot -->
+    <link name="base_link">
+    </link>
+
+    <!-- Link of Body -->
+    <link name="body">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Body.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Body.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.24220908 0.0 0.28713694"/>
+            <mass value="26.7275394"/>
+            <inertia ixx="1.08271097" ixy="-0.0000043" ixz="-0.38858836" iyx = "-0.0000043" iyy="1.87925344" iyz ="0.0" izx="-0.38858836" izy="0.0" izz="0.81139153"/>
+        </inertial>
+    </link>
+
+    <!-- Joint connecting base link and body -->
+    <joint name="base_link_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="body"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </joint>
+
+    <!-- Link of Handlebars -->
+    <link name="handlebars">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Handlebars.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0.0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Handlebars.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0.0 0" xyz="0 0 0"/>
+            <mass value="12.90945896"/>
+            <inertia ixx="0.35806985" ixy="0.0" ixz="-0.00007473" iyx = "0.0" iyy="0.27955679" iyz ="0.0"  izx="0.0" izy="0.0" izz="0.08943802"/>
+        </inertial>
+    </link>
+
+    <!-- Handlebars joint -->
+    <joint name="handlebars_joint" type="revolute">
+        <parent link="body"/>
+        <child link="handlebars"/>
+        <origin rpy="0 -0.436549886 0" xyz="0.51742583 0.0 0.53743702"/>
+        <axis xyz = "0 0 1"/>
+        <limit lower = "-0.5" upper = "0.5" effort = "50.0" velocity = "25.0" />
+    </joint>
+
+    <!-- Handlebars transmission -->
+    <transmission name="steer_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="steer_joint_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </actuator>
+      <joint name="handlebars_joint">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <!-- Front Suspension Link -->
+   <link name="front_suspension">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Front_Suspension.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Front_Suspension.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="2.06456521"/>
+            <inertia ixx="0.04421605" ixy="0.0" ixz="0.01285381" iyx = "0.0" iyy="0.03258063" iyz ="0.0"  izx="0.01285381" izy="0.0" izz="0.02965364"/>
+        </inertial>
+    </link>
+
+    <!-- Front Suspension Joint -->
+    <!-- <joint name="front_suspension_joint" type="prismatic">
+        <parent link="handlebars"/>
+        <child link="front_suspension"/>
+        <origin rpy="0 0 0" xyz="0.00840278 -0.000000004 -0.47161173" />
+        <axis xyz = "0 0 1" />
+        <limit lower = "0.0" upper = "0.16" effort = "50.0" velocity = "25.0" />
+    </joint> -->
+
+    <joint name="front_suspension_joint" type="fixed">
+        <parent link="handlebars"/>
+        <child link="front_suspension"/>
+        <origin rpy="0 0 0" xyz="0.00840278 0.0 -0.47161173" />
+    </joint>
+
+    <!-- Front Wheel Link -->
+   <link name="front_wheel">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Wheel.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Wheel.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="118.44376142"/>
+            <inertia ixx="1.93952475" ixy="-0.00001354" ixz="-0.00002261" iyx = "-0.00001354" iyy="3.82147216" iyz ="0.00000645"  izx="-0.00002261" izy="0.00000645" izz="1.93949324"/>
+        </inertial>
+    </link>
+
+    <!-- Front Wheel Joint -->
+    <joint name="front_wheel_joint" type="continuous">
+        <parent link="front_suspension"/>
+        <child link="front_wheel"/>
+        <origin rpy="0 0.436549886 0" xyz="0.05422176 0 -0.15074257" />
+        <axis xyz="0 1 0" />
+    </joint>
+
+    <!-- Front Wheel Transmission -->
+    <transmission name="front_wheel_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="front_wheel_joint_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </actuator>
+      <joint name="front_wheel_joint">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+
+    <!-- Rear Wheel Link -->
+   <link name="rear_wheel">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Wheel.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Wheel.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="118.44376142"/>
+            <inertia ixx="1.93952475" ixy="-0.00001354" ixz="-0.00002261" iyx = "-0.00001354" iyy="3.82147216" iyz ="0.00000645"  izx="-0.00002261" izy="0.00000645" izz="1.93949324"/>
+        </inertial>
+    </link>
+
+    <!-- Rear Wheel Joint -->
+    <joint name="rear_wheel_joint" type="continuous">
+        <parent link="body"/>
+        <child link="rear_wheel"/>
+        <origin rpy="0 0 0" xyz="-0.43470565 0 0" />
+        <axis xyz="0 1 0" />
+    </joint>
+
+    <!-- Rear Wheel Transmission -->
+    <transmission name="rear_wheel_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="rear_wheel_joint_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </actuator>
+      <joint name="rear_wheel_joint">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <!-- Gazebo plugins -->
+    <gazebo>
+        <!-- Load ros_control plugin using the steer_bot_hardware_gazebo
+        implementation of the hardware_interface::RobotHW -->
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/bicycle_robot/</robotNamespace>
+    </plugin>
+
+    <plugin name="gazebo_ros_joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+        <robotNamespace>/bicycle_robot/</robotNamespace>
+        <jointName>
+            front_wheel_joint
+        </jointName>
+        <updateRate>50</updateRate>
+        <alwaysOn>true</alwaysOn>
+    </plugin>
+
+  </gazebo>
+
+</robot>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>ugv_assign_description</name>
+    <version>0.0.0</version>
+    <description>The Bicycle ugv test package</description>
+    <maintainer email="jeanps95@gmail.com">Jean Paulo</maintainer>
+    <license>TODO</license>
+    <buildtool_depend>catkin</buildtool_depend>
+    <depend>urdf</depend>
+    <depend>xacro</depend>
+    <exec_depend>roslaunch</exec_depend>
+</package>
