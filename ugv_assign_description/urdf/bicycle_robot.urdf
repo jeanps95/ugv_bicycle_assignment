@@ -24,9 +24,10 @@
         </collision>
 
         <inertial>
-            <origin rpy="0 0 0" xyz="0.24220908 0.0 0.28713694"/>
-            <mass value="26.7275394"/>
-            <inertia ixx="1.08271097" ixy="-0.0000043" ixz="-0.38858836" iyx = "-0.0000043" iyy="1.87925344" iyz ="0.0" izx="-0.38858836" izy="0.0" izz="0.81139153"/>
+            <origin rpy="0 0 0" xyz="0.243139 0.0 0.28823924"/>
+            <!-- <mass value="27.07252378"/> -->
+            <mass value="80"/>
+            <inertia ixx="3.972233197" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="7.985929675" iyz ="0.0" izx="0.0" izy="0.0" izz="4.813503322"/>
         </inertial>
     </link>
 
@@ -36,6 +37,7 @@
         <child link="body"/>
         <origin rpy="0 0 0" xyz="0 0 0" />
     </joint>
+
 
     <!-- Link of Handlebars -->
     <link name="handlebars">
@@ -56,7 +58,7 @@
         <inertial>
             <origin rpy="0 0.0 0" xyz="0 0 0"/>
             <mass value="12.90945896"/>
-            <inertia ixx="0.35806985" ixy="0.0" ixz="-0.00007473" iyx = "0.0" iyy="0.27955679" iyz ="0.0"  izx="0.0" izy="0.0" izz="0.08943802"/>
+            <inertia ixx="0.819980734" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.518852099" iyz ="0.0"  izx="0.0" izy="0.0" izz="0.368397616"/>
         </inertial>
     </link>
 
@@ -66,7 +68,7 @@
         <child link="handlebars"/>
         <origin rpy="0 -0.436549886 0" xyz="0.51742583 0.0 0.53743702"/>
         <axis xyz = "0 0 1"/>
-        <limit lower = "-0.5" upper = "0.5" effort = "50.0" velocity = "25.0" />
+        <limit lower = "-0.5" upper = "0.5" effort = "10.0" velocity = "5.0" />
     </joint>
 
     <!-- Handlebars transmission -->
@@ -99,25 +101,32 @@
 
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="2.06456521"/>
-            <inertia ixx="0.04421605" ixy="0.0" ixz="0.01285381" iyx = "0.0" iyy="0.03258063" iyz ="0.0"  izx="0.01285381" izy="0.0" izz="0.02965364"/>
+            <mass value="7.78054865"/>
+            <inertia ixx="0.18819038" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.11650317" iyz ="0.0"  izx="0.0" izy="0.0" izz="0.08405421"/>
         </inertial>
     </link>
 
     <!-- Front Suspension Joint -->
-    <!-- <joint name="front_suspension_joint" type="prismatic">
+    <joint name="front_suspension_joint" type="prismatic">
         <parent link="handlebars"/>
         <child link="front_suspension"/>
-        <origin rpy="0 0 0" xyz="0.00840278 -0.000000004 -0.47161173" />
+        <origin rpy="0 0 0" xyz="0.00717323 0.0 -0.45356114" />
         <axis xyz = "0 0 1" />
-        <limit lower = "0.0" upper = "0.16" effort = "50.0" velocity = "25.0" />
-    </joint> -->
-
-    <joint name="front_suspension_joint" type="fixed">
-        <parent link="handlebars"/>
-        <child link="front_suspension"/>
-        <origin rpy="0 0 0" xyz="0.00840278 0.0 -0.47161173" />
+        <limit lower = "0.0" upper = "0.165" effort = "50.0" velocity = "1.0" />
+        <dynamics damping = "1000" friction = "1000" />
     </joint>
+
+    <!-- Front Suspension Transmission -->
+    <transmission name="front_suspension_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="front_suspension_joint_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </actuator>
+      <joint name="front_suspension_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
 
     <!-- Front Wheel Link -->
    <link name="front_wheel">
@@ -137,8 +146,8 @@
 
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="118.44376142"/>
-            <inertia ixx="1.93952475" ixy="-0.00001354" ixz="-0.00002261" iyx = "-0.00001354" iyy="3.82147216" iyz ="0.00000645"  izx="-0.00002261" izy="0.00000645" izz="1.93949324"/>
+            <mass value="12"/>
+            <inertia ixx="1.055546716" ixy="0" ixz="0" iyx = "0" iyy="2.057926575" iyz ="0.0"  izx="0" izy="0" izz="1.055546716"/>
         </inertial>
     </link>
 
@@ -146,21 +155,40 @@
     <joint name="front_wheel_joint" type="continuous">
         <parent link="front_suspension"/>
         <child link="front_wheel"/>
-        <origin rpy="0 0.436549886 0" xyz="0.05422176 0 -0.15074257" />
+        <origin rpy="0 0.436549886 0" xyz="0.05546002 0 -0.16877486" />
         <axis xyz="0 1 0" />
     </joint>
 
-    <!-- Front Wheel Transmission -->
-    <transmission name="front_wheel_joint_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <actuator name="front_wheel_joint_motor">
-        <mechanicalReduction>1</mechanicalReduction>
-        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      </actuator>
-      <joint name="front_wheel_joint">
-        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      </joint>
-    </transmission>
+
+    <!-- Link of Back Body -->
+    <link name="back_body">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Back_Body.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Back_Body.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="-0.25658211 0.0 -0.00000005172"/>
+            <mass value="30"/>
+            <inertia ixx="0.17410128" ixy="0.0" ixz="-0.0000001204" iyx = "0.0" iyy="0.39381739" iyz ="0.0" izx="-0.0000001204" izy="0.0" izz="0.5492687"/>
+        </inertial>
+    </link>
+
+    <!-- Joint connecting both bodies -->
+    <joint name="back_body_joint" type="fixed">
+        <parent link="body"/>
+        <child link="back_body"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </joint>
 
 
     <!-- Rear Wheel Link -->
@@ -181,17 +209,18 @@
 
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="118.44376142"/>
-            <inertia ixx="1.93952475" ixy="-0.00001354" ixz="-0.00002261" iyx = "-0.00001354" iyy="3.82147216" iyz ="0.00000645"  izx="-0.00002261" izy="0.00000645" izz="1.93949324"/>
+            <mass value="12"/>
+            <inertia ixx="1.055546716" ixy="0" ixz="0" iyx = "0" iyy="2.057926575" iyz ="0.0"  izx="0" izy="0" izz="1.055546716"/>
         </inertial>
     </link>
 
     <!-- Rear Wheel Joint -->
     <joint name="rear_wheel_joint" type="continuous">
-        <parent link="body"/>
+        <parent link="back_body"/>
         <child link="rear_wheel"/>
         <origin rpy="0 0 0" xyz="-0.43470565 0 0" />
         <axis xyz="0 1 0" />
+        <dynamics damping = "200" friction = "200" />
     </joint>
 
     <!-- Rear Wheel Transmission -->
@@ -206,21 +235,196 @@
       </joint>
     </transmission>
 
+    <!-- Link of Middle Body -->
+    <link name="middle_body">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Mini_Wheels_Body.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Mini_Wheels_Body.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.0 0.0 -0.01612632"/>
+            <mass value="15"/>
+            <inertia ixx="0.18693089" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.00688622" iyz ="0.0" izx="0.0" izy="0.0" izz="0.18112334"/>
+        </inertial>
+    </link>
+
+    <!-- Joint connecting both bodies -->
+    <joint name="middle_body_joint" type="fixed">
+        <parent link="body"/>
+        <child link="middle_body"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </joint>
+
+    <!-- Link of Right Middle suspension -->
+    <link name="middle_suspension_right">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Middle_Suspension.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Middle_Suspension.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.0 -0.225 -0.19859667"/>
+            <mass value="1"/>
+            <inertia ixx="0.00134723" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.00134723" iyz ="0.0" izx="0.0" izy="0.0" izz="0.00031567"/>
+        </inertial>
+    </link>
+
+    <!-- Joint connecting both bodies -->
+    <joint name="middle_suspension_right_joint" type="fixed">
+        <parent link="middle_body"/>
+        <child link="middle_suspension_right"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </joint>
+    <!-- <joint name="middle_suspension_right_joint" type="prismatic">
+        <parent link="middle_body"/>
+        <child link="middle_suspension_right"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+        <axis xyz = "0 0 1" />
+        <limit lower = "0.0" upper = "0.08" effort = "500.0" velocity = "0.1" />
+        <dynamics damping = "1000" friction = "1000" />
+    </joint> -->
+
+    <!-- <transmission name="middle_suspension_right_joint_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="middle_suspension_right_joint_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </actuator>
+      <joint name="middle_suspension_right_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+    </transmission> -->
+
+    <!-- Link of left Middle suspension -->
+    <link name="middle_suspension_left">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Middle_Suspension.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Middle_Suspension.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0"  xyz="0.0 -0.225 -0.19859667"/>
+            <mass value="15"/>
+            <inertia ixx="0.00134723" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.00134723" iyz ="0.0" izx="0.0" izy="0.0" izz="0.00031567"/>
+        </inertial>
+    </link>
+
+    <!-- Joint connecting both bodies -->
+    <joint name="middle_suspension_left_joint" type="fixed">
+        <parent link="body"/>
+        <child link="middle_suspension_left"/>
+        <origin rpy="0 0 3.141592654" xyz="0 0 0" />
+    </joint>
+    <!-- <joint name="middle_suspension_left_joint" type="prismatic">
+        <parent link="body"/>
+        <child link="middle_suspension_left"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+        <axis xyz = "0 0 1" />
+        <limit lower = "0.0" upper = "0.05" effort = "50.0" velocity = "1.0" />
+        <dynamics damping = "10" friction = "10" />
+    </joint> -->
+
+
+
+    <!-- Middle Wheel Right Link -->
+   <link name="middle_wheel_right">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Mini_Wheels.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Mini_Wheels.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="5"/>
+            <inertia ixx="0.193952475" ixy="0" ixz="0" iyx = "0" iyy="0.382147216" iyz ="0.0"  izx="0" izy="0" izz="0.193949324"/>
+        </inertial>
+    </link>
+
+    <!-- Middle Wheel Right Joint -->
+    <joint name="middle_wheel_right_joint" type="continuous">
+        <parent link="middle_suspension_right"/>
+        <child link="middle_wheel_right"/>
+        <origin rpy="0 0 0" xyz="0 -0.275 -0.22" />
+        <axis xyz="0 1 0" />
+        <dynamics damping = "10" friction = "10" />
+    </joint>
+
+
+    <!-- Middle Wheel Left Link -->
+   <link name="middle_wheel_left">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Mini_Wheels.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Mini_Wheels.stl"/>
+                </geometry>
+        </collision>
+
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="5"/>
+            <inertia ixx="0.193952475" ixy="0" ixz="0" iyx = "0" iyy="0.382147216" iyz ="0.0"  izx="0" izy="0" izz="0.193949324"/>
+        </inertial>
+    </link>
+
+    <!-- Middle Wheel Left Joint -->
+    <joint name="middle_wheel_left_joint" type="continuous">
+        <parent link="middle_suspension_left"/>
+        <child link="middle_wheel_left"/>
+        <origin rpy="0 0 0" xyz="0 -0.275 -0.22" />
+        <axis xyz="0 1 0" />
+        <dynamics damping = "10" friction = "10" />
+    </joint>
+
+
     <!-- Gazebo plugins -->
     <gazebo>
-        <!-- Load ros_control plugin using the steer_bot_hardware_gazebo
-        implementation of the hardware_interface::RobotHW -->
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
         <robotNamespace>/bicycle_robot/</robotNamespace>
-    </plugin>
-
-    <plugin name="gazebo_ros_joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-        <robotNamespace>/bicycle_robot/</robotNamespace>
-        <jointName>
-            front_wheel_joint
-        </jointName>
-        <updateRate>50</updateRate>
-        <alwaysOn>true</alwaysOn>
+        <legacyModeNS>true</legacyModeNS>
     </plugin>
 
   </gazebo>
