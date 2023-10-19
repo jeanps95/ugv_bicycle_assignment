@@ -420,13 +420,190 @@
     </joint>
 
 
+
+    <!-- SENSORS -->
+
+
+    <!-- IMU Link -->
+   <link name="imu_link">
+    </link>
+
+    <!-- IMU Joint -->
+    <joint name="imu_joint" type="fixed">
+        <parent link="body"/>
+        <child link="imu_link"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </joint>
+
+
+    <!-- Camera Support Link -->
+   <link name="camera_support">
+        <visual>
+            <origin rpy="0 0.436549886 0" xyz="0.03568383 0 0.12892733"/>
+            <geometry>
+                <mesh filename="package://ugv_assign_description/meshes/Camera_Support.stl"/>
+            </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://ugv_assign_description/meshes/Camera_Support.stl"/>
+            </geometry>
+        </collision>
+
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="3.4016517"/>
+        <inertia ixx="0.00609655" ixy="0" ixz="0" iyx = "0" iyy="0.00871727" iyz ="0.0"  izx="0" izy="0" izz="0.0116844"/>
+    </inertial>
+    </link>
+
+    <!-- Camera Support Joint -->
+    <joint name="camera_support_joint" type="fixed">
+        <parent link="handlebars"/>
+        <child link="camera_support"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </joint>
+
+    <!-- Camera Stereo Link -->
+   <link name="camera_stereo">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Camera_Stereo.stl"/>
+                </geometry>
+        </visual>
+
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://ugv_assign_description/meshes/Camera_Stereo.stl"/>
+                </geometry>
+        </collision>
+
+    </link>
+
+    <!-- Camera Stereo Joint -->
+    <joint name="camera_stereo_joint" type="fixed">
+        <parent link="camera_support"/>
+        <child link="camera_stereo"/>
+        <origin rpy="0 0.436549886 0" xyz="0.15649823 0.08 0.09515994" />
+    </joint>
+
+    <!-- Camera Stereo Left Lens -->
+    <link name="camera_stereo_left">
+    </link>
+
+    <!-- Camera Stereo Left Lens Joint -->
+    <joint name="camera_stereo_left_joint" type="fixed">
+        <parent link="camera_stereo"/>
+        <child link="camera_stereo_left"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </joint>
+
+    <!-- Camera Stereo Right Lens -->
+    <link name="camera_stereo_right">
+    </link>
+
+    <!-- Camera Stereo Right Lens Joint -->
+    <joint name="camera_stereo_right_joint" type="fixed">
+        <parent link="camera_stereo"/>
+        <child link="camera_stereo_right"/>
+        <origin rpy="0 0 0" xyz="0 -0.16 0" />
+    </joint>
+
+
     <!-- Gazebo plugins -->
     <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
         <robotNamespace>/bicycle_robot/</robotNamespace>
         <legacyModeNS>true</legacyModeNS>
     </plugin>
+    </gazebo>
 
+    <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>gazebo/imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>50.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
   </gazebo>
+
+
+  <gazebo reference="camera_stereo_left">
+    <sensor type="multicamera" name="stereo_camera">
+      <update_rate>30.0</update_rate>
+      <camera name="left">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>50</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <camera name="right">
+        <pose>0 -0.16 0 0 0 0</pose>
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>50</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>multisense_sl/camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_stereo_left</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+  <xacro:include filename="$(find velodyne_description)/urdf/HDL-32E.urdf.xacro"/>
+  <xacro:HDL-32E parent="base_link" name="velodyne" topic="/bicycle_robot/velodyne_points" organize_cloud="false" hz="50" samples="220" gpu="false">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:HDL-32E>
+  
 
 </robot>
