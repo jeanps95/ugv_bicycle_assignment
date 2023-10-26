@@ -1,3 +1,10 @@
+# Table of contents
+* [Objective](#objective)
+* [Installations and dependencies](#installations-and-dependencies)
+* [Usage](#usage)
+* [Development process](#development-process)
+* [Problems found during development](#problems-found-during-development)
+
 # Objective
 
 The aim of this repository is to show the step-by-step creation of a bicycle-like robot, its challenges, problems, solutions and lessons learned.
@@ -75,14 +82,14 @@ roslaunch ugv_assign_description description.launch
 ### If you want to move the robot with RQT commands in a empty Gazebo World:
 
 ```
-roslaunch ugv_assign_gazebo gazebo_empty.launch
+roslaunch ugv_assign_gazebo gazebo_empty_rqt.launch
 ```
 ![](/imgs/gazebo_empty.gif)
 
 ### If you want to move the robot with RQT commands in a Desert Gazebo World:
 
 ```
-roslaunch ugv_assign_gazebo gazebo_desert.launch
+roslaunch ugv_assign_gazebo gazebo_desert_rqt.launch
 ```
 ![](/imgs/gazebo_desert.gif)
 
@@ -93,6 +100,28 @@ roslaunch ugv_assign_gazebo gazebo_desert_sand.launch
 ```
 Keep in mind that sand is still a work in progress, both in size and mechanical properties.
 ![](/imgs/gazebo_sand.png)
+
+### Other launchers
+
+#### Empty World
+
+```
+roslaunch ugv_assign_gazebo gazebo_empty.launch
+```
+
+```
+roslaunch ugv_assign_gazebo gazebo_empty_sand_rqt.launch
+```
+
+```
+roslaunch ugv_assign_gazebo gazebo_empty_sand.launch
+```
+
+#### Desert
+
+```
+roslaunch ugv_assign_gazebo gazebo_desert.launch
+```
 
 # Development process
 
@@ -250,7 +279,7 @@ I used the "populate" feature of the World SDF to generate a number of particles
 ![](/imgs/sand.gif)
 
 
-## Problems found during development
+# Problems found during development
 
 ### Sideways Fall - Solved
 

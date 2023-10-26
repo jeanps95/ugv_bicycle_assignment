@@ -3,7 +3,7 @@
 
   <arg name="model" default="$(find ugv_assign_description)/urdf/bicycle_robot.urdf"/>
   <arg name="namespace" default="/bicycle_robot" />
-  <arg name="world_name" default="/worlds/empty_world.world"/> 
+  <arg name="world_name" default="$(find ugv_assign_gazebo)/worlds/empty_world.world"/> 
   <arg name="cmd_timeout" default="0.5"/>
   <arg name="x" default="0.0"/>
   <arg name="y" default="0.0"/>
