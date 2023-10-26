@@ -9,7 +9,7 @@
   <arg name="x" default="0.0"/>
   <arg name="y" default="0.0"/>
   <!-- <arg name="z" default="0.36" /> -->
-  <arg name="z" default="-12.45" />
+  <arg name="z" default="-12.0" />
   <arg name="roll" default="0.0"/>
   <arg name="pitch" default="0.0"/>
   <arg name="yaw" default="0.0"/>
@@ -48,8 +48,8 @@
     <node name="spawn_vehicle" pkg="gazebo_ros" type="spawn_model"
       args="-urdf
           -param robot_description
-          -model bicycle_robot
           -gazebo_namespace /$(arg namespace)/gazebo/
+          -model bicycle_robot
           -x $(arg x) -y $(arg y) -z $(arg z)
           -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"
       respawn="false" output="screen" />

@@ -113,7 +113,7 @@
         <origin rpy="0 0 0" xyz="0.00717323 0.0 -0.45356114" />
         <axis xyz = "0 0 1" />
         <limit lower = "0.0" upper = "0.165" effort = "50.0" velocity = "1.0" />
-        <dynamics damping = "1000" friction = "1000" />
+        <dynamics damping = "8000" friction = "8000"/>
     </joint>
 
     <!-- Front Suspension Transmission -->
@@ -157,6 +157,7 @@
         <child link="front_wheel"/>
         <origin rpy="0 0.436549886 0" xyz="0.05546002 0 -0.16877486" />
         <axis xyz="0 1 0" />
+        <dynamics damping = "20" friction = "20" />
     </joint>
 
 
@@ -209,7 +210,7 @@
 
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="12"/>
+            <mass value="20"/>
             <inertia ixx="1.055546716" ixy="0" ixz="0" iyx = "0" iyy="2.057926575" iyz ="0.0"  izx="0" izy="0" izz="1.055546716"/>
         </inertial>
     </link>
@@ -220,7 +221,7 @@
         <child link="rear_wheel"/>
         <origin rpy="0 0 0" xyz="-0.43470565 0 0" />
         <axis xyz="0 1 0" />
-        <dynamics damping = "200" friction = "200" />
+        <dynamics damping = "2000" friction = "2000" />
     </joint>
 
     <!-- Rear Wheel Transmission -->
@@ -282,28 +283,24 @@
         </collision>
 
         <inertial>
-            <origin rpy="0 0 0" xyz="0.0 -0.225 -0.19859667"/>
+            <!-- <origin rpy="0 0 0" xyz="0.0 -0.225 -0.19859667"/> -->
+            <origin rpy="0 0 0" xyz="0 0 0"/>
             <mass value="1"/>
-            <inertia ixx="0.00134723" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.00134723" iyz ="0.0" izx="0.0" izy="0.0" izz="0.00031567"/>
+            <inertia ixx="0.0134723" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.0134723" iyz ="0.0" izx="0.0" izy="0.0" izz="0.0031567"/>
         </inertial>
     </link>
 
     <!-- Joint connecting both bodies -->
-    <joint name="middle_suspension_right_joint" type="fixed">
-        <parent link="middle_body"/>
-        <child link="middle_suspension_right"/>
-        <origin rpy="0 0 0" xyz="0 0 0" />
-    </joint>
-    <!-- <joint name="middle_suspension_right_joint" type="prismatic">
+    <joint name="middle_suspension_right_joint" type="prismatic">
         <parent link="middle_body"/>
         <child link="middle_suspension_right"/>
         <origin rpy="0 0 0" xyz="0 0 0" />
         <axis xyz = "0 0 1" />
-        <limit lower = "0.0" upper = "0.08" effort = "500.0" velocity = "0.1" />
+        <limit lower = "0.0" upper = "0.05" effort = "50.0" velocity = "0.1" />
         <dynamics damping = "1000" friction = "1000" />
-    </joint> -->
+    </joint>
 
-    <!-- <transmission name="middle_suspension_right_joint_trans">
+    <transmission name="middle_suspension_right_joint_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <actuator name="middle_suspension_right_joint_motor">
         <mechanicalReduction>1</mechanicalReduction>
@@ -312,7 +309,7 @@
       <joint name="middle_suspension_right_joint">
         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       </joint>
-    </transmission> -->
+    </transmission>
 
     <!-- Link of left Middle suspension -->
     <link name="middle_suspension_left">
@@ -331,26 +328,21 @@
         </collision>
 
         <inertial>
-            <origin rpy="0 0 0"  xyz="0.0 -0.225 -0.19859667"/>
+            <origin rpy="0 0 0"  xyz="0.0 0 0"/>
             <mass value="15"/>
-            <inertia ixx="0.00134723" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.00134723" iyz ="0.0" izx="0.0" izy="0.0" izz="0.00031567"/>
+            <inertia ixx="0.0134723" ixy="0.0" ixz="0.0" iyx = "0.0" iyy="0.0134723" iyz ="0.0" izx="0.0" izy="0.0" izz="0.0031567"/>
         </inertial>
     </link>
 
     <!-- Joint connecting both bodies -->
-    <joint name="middle_suspension_left_joint" type="fixed">
+    <joint name="middle_suspension_left_joint" type="prismatic">
         <parent link="body"/>
         <child link="middle_suspension_left"/>
         <origin rpy="0 0 3.141592654" xyz="0 0 0" />
-    </joint>
-    <!-- <joint name="middle_suspension_left_joint" type="prismatic">
-        <parent link="body"/>
-        <child link="middle_suspension_left"/>
-        <origin rpy="0 0 0" xyz="0 0 0" />
         <axis xyz = "0 0 1" />
         <limit lower = "0.0" upper = "0.05" effort = "50.0" velocity = "1.0" />
-        <dynamics damping = "10" friction = "10" />
-    </joint> -->
+        <dynamics damping = "1000" friction = "1000" />
+    </joint>
 
 
 
@@ -383,7 +375,6 @@
         <child link="middle_wheel_right"/>
         <origin rpy="0 0 0" xyz="0 -0.275 -0.22" />
         <axis xyz="0 1 0" />
-        <dynamics damping = "10" friction = "10" />
     </joint>
 
 
@@ -416,10 +407,7 @@
         <child link="middle_wheel_left"/>
         <origin rpy="0 0 0" xyz="0 -0.275 -0.22" />
         <axis xyz="0 1 0" />
-        <dynamics damping = "10" friction = "10" />
     </joint>
-
-
 
     <!-- SENSORS -->
 
@@ -516,10 +504,17 @@
 
     <!-- Gazebo plugins -->
     <gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>/bicycle_robot/</robotNamespace>
-        <legacyModeNS>true</legacyModeNS>
-    </plugin>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/bicycle_robot</robotNamespace>
+            <legacyModeNS>true</legacyModeNS>
+        </plugin>
+    </gazebo>
+
+    <gazebo>
+        <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+            <jointName>front_wheel_joint,middle_wheel_left_joint,middle_wheel_right_joint,front_suspension_joint</jointName>
+            <updateRate>50</updateRate>
+        </plugin>
     </gazebo>
 
     <gazebo reference="imu_link">
@@ -530,7 +525,7 @@
       <visualize>true</visualize>
       <topic>__default_topic__</topic>
       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-        <topicName>gazebo/imu</topicName>
+        <topicName>imu</topicName>
         <bodyName>imu_link</bodyName>
         <updateRateHZ>50.0</updateRateHZ>
         <gaussianNoise>0.0</gaussianNoise>
@@ -585,7 +580,7 @@
       <plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so">
         <alwaysOn>true</alwaysOn>
         <updateRate>0.0</updateRate>
-        <cameraName>multisense_sl/camera</cameraName>
+        <cameraName>camera</cameraName>
         <imageTopicName>image_raw</imageTopicName>
         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
         <frameName>camera_stereo_left</frameName>
@@ -600,10 +595,57 @@
   </gazebo>
 
 
-  <xacro:include filename="$(find velodyne_description)/urdf/HDL-32E.urdf.xacro"/>
-  <xacro:HDL-32E parent="base_link" name="velodyne" topic="/bicycle_robot/velodyne_points" organize_cloud="false" hz="50" samples="220" gpu="false">
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </xacro:HDL-32E>
-  
+    <!-- Velodyne Link -->
+    <link name="bicycle_velodyne">
+    </link>
+
+    <!-- Velodyne Joint -->
+    <joint name="bicycle_velodyne" type="fixed">
+        <parent link="body"/>
+        <child link="bicycle_velodyne"/>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </joint>
+
+
+    <gazebo reference="bicycle_velodyne">
+        <sensor type="ray" name="bicycle_velodyne-VLP16">
+          <pose>0 0 0 0 0 0</pose>
+          <visualize>false</visualize>
+          <update_rate>50</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>256</samples>
+                <resolution>1</resolution>
+                <min_angle>-3.141592654</min_angle>
+                <max_angle>3.141592654</max_angle>
+              </horizontal>
+              <vertical>
+                <samples>16</samples>
+                <resolution>1</resolution>
+                <min_angle>-0.261799388</min_angle>
+                <max_angle>0.261799388</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>0.3</min>
+              <max>21.0</max>
+              <resolution>0.001</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.0</stddev>
+            </noise>
+          </ray>
+          <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_velodyne_laser.so">
+            <topicName>/velodyne_points</topicName>
+            <frameName>bicycle_velodyne</frameName>
+            <min_range>0.9</min_range>
+            <max_range>20.0</max_range>
+            <gaussianNoise>0.008</gaussianNoise>
+          </plugin>
+        </sensor>
+    </gazebo>
 
 </robot>
