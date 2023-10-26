@@ -16,36 +16,5 @@
         </clouds>
       </sky>
     </scene>
-
-<!-- <population name="ball_population1">
-  <model name="ball">
-    <static>false</static>
-    <link name="ball_body">
-      <collision name="ball_collision">
-        <geometry>
-          <sphere>
-            <radius>0.005</radius>
-          </sphere>
-        </geometry>
-      </collision>
-      <visual name="ball_visual">
-        <geometry>
-          <sphere>
-            <radius>0.005</radius>
-          </sphere>
-        </geometry>
-      </visual>
-    </link>
-  </model>
-  <pose>2.5 0 -12.8 0 0 0</pose>
-  <box>
-    <size>2 0.35 0.1</size>
-  </box>
-  <model_count>200</model_count>
-  <distribution>
-    <type>random</type>
-  </distribution>
-</population> -->
-
   </world>
 </sdf>
