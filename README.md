@@ -123,6 +123,37 @@ roslaunch ugv_assign_gazebo gazebo_empty_sand.launch
 roslaunch ugv_assign_gazebo gazebo_desert.launch
 ```
 
+## Script Run
+
+The ugv_assign_gazebo package contains 2 python scripts. One that sends data in an Ackerman Stamped message format, and another that reads this data and converts it into Geometry/Twist messages. The gif below shows the terminal configuration so that the script can be used:
+
+![](/imgs/Script-Empty-World.gif)
+
+Terminal 1 (any launcher file - Empty World is recommended):
+
+```
+roslaunch ugv_assign_gazebo gazebo_desert.launch
+```
+
+Terminal 2 (starting from sourced workspace):
+
+```
+cd src/ugv_bicycle_assignment/ugv_assign_gazebo/scripts/
+```
+```
+python3 ackermann_publisher.py
+```
+
+
+Terminal 3 (starting from sourced workspace):
+
+```
+cd src/ugv_bicycle_assignment/ugv_assign_gazebo/scripts/
+```
+```
+python3 ackermann_translate.py
+```
+
 # Development process
 
 ## Research and articles
