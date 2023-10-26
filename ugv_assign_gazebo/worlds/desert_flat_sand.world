@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="desert_world">
+    <include> <!-- Add in a light source -->
+      <uri>model://sun</uri>
+    </include>
+    <include> <!-- Add your custom model -->
+      <uri>model://desert_flat</uri>
+      <name>desert_flat</name>
+      <pose>-120 0 0 0 0 0</pose>
+    </include>
+    <scene>
+      <sky>
+        <clouds>
+          <speed>12</speed>
+        </clouds>
+      </sky>
+    </scene>
+
+<population name="ball_population1">
+  <model name="ball">
+    <static>false</static>
+    <link name="ball_body">
+      <collision name="ball_collision">
+        <geometry>
+          <sphere>
+            <radius>0.003</radius>
+          </sphere>
+        </geometry>
+      </collision>
+      <visual name="ball_visual">
+        <geometry>
+          <sphere>
+            <radius>0.003</radius>
+          </sphere>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+  <pose>2.5 0 -12.5 0 0 0</pose>
+  <box>
+    <size>2 0.35 0.1</size>
+  </box>
+  <model_count>200</model_count>
+  <distribution>
+    <type>random</type>
+  </distribution>
+</population>
+
+  </world>
+</sdf>
