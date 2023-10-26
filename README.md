@@ -132,7 +132,7 @@ The ugv_assign_gazebo package contains 2 python scripts. One that sends data in 
 Terminal 1 (any launcher file - Empty World is recommended):
 
 ```
-roslaunch ugv_assign_gazebo gazebo_desert.launch
+roslaunch ugv_assign_gazebo gazebo_empty.launch
 ```
 
 Terminal 2 (starting from sourced workspace):
